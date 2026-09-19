@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Add Prescription | MediRecord{% endblock %}
+{% block content %}
+<nav class="breadcrumb-nav mb-3">Dashboard → Patients → {{ visit.patient_code }} → Visit Details → Add Prescription</nav>
+<div class="card">
+    <div class="card-body">
+        <h1 class="h4 mb-2">Add Prescription</h1>
+        <p class="text-muted">Visit for {{ visit.patient_code }} — {{ visit.patient_name }} on {{ visit.visit_date }}</p>
+        <form method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="medicine">Medicine</label>
+                <input class="form-control" id="medicine" name="medicine" required placeholder="Paracetamol">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="dosage">Dosage</label>
+                <input class="form-control" id="dosage" name="dosage" placeholder="500 mg">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="frequency">Frequency</label>
+                <input class="form-control" id="frequency" name="frequency" placeholder="2 times/day">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="duration">Duration</label>
+                <input class="form-control" id="duration" name="duration" placeholder="3 days">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="instructions">Instructions</label>
+                <input class="form-control" id="instructions" name="instructions" placeholder="After food">
+            </div>
+            <button class="btn btn-primary" type="submit">ADD PRESCRIPTION</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('visit_details', visit_id=visit.id) }}">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

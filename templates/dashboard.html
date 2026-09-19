@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | MediRecord{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">Dashboard</h1>
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card card h-100">
+            <div class="card-body">
+                <div class="text-muted">Total Patients</div>
+                <div class="display-6">{{ stats.total_patients }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card card h-100">
+            <div class="card-body">
+                <div class="text-muted">Active Patients</div>
+                <div class="display-6">{{ stats.active_patients }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card card h-100">
+            <div class="card-body">
+                <div class="text-muted">Today's Visits</div>
+                <div class="display-6">{{ stats.today_visits }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card card h-100">
+            <div class="card-body">
+                <div class="text-muted">Total Prescriptions</div>
+                <div class="display-6">{{ stats.total_prescriptions }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h6 mb-3">Visits by date</h2>
+        <canvas id="visitsChart" height="90"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="h6 mb-3">Recent Patients</h2>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Registered Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in recent %}
+                    <tr>
+                        <td>{{ patient.patient_id }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.gender }}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>{{ patient.created_at[:10] if patient.created_at else '' }}</td>
+                        <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('patient_details', patient_id=patient.patient_id) }}">View</a></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="text-muted">No patient records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    const ctx = document.getElementById('visitsChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels | tojson }},
+            datasets: [{
+                label: 'Visits',
+                data: {{ chart_values | tojson }},
+                backgroundColor: '#2a7f7f'
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+</script>
+{% endblock %}

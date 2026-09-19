@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Visits | MediRecord{% endblock %}
+{% block content %}
+<nav class="breadcrumb-nav mb-3">Dashboard → Visits</nav>
+<h1 class="h4 mb-3">Visits</h1>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Visit Date</th>
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Doctor</th>
+                    <th>Diagnosis</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for visit in visits %}
+                <tr>
+                    <td>{{ visit.visit_date }}</td>
+                    <td>{{ visit.patient_code }}</td>
+                    <td>{{ visit.patient_name }}</td>
+                    <td>{{ visit.doctor }}</td>
+                    <td>{{ visit.diagnosis or '—' }}</td>
+                    <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('visit_details', visit_id=visit.id) }}">View Visit</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-muted">No visits recorded.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

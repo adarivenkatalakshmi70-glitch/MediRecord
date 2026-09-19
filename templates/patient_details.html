@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.patient_id }} | MediRecord{% endblock %}
+{% block content %}
+<nav class="breadcrumb-nav mb-3">Dashboard → Patients → {{ patient.patient_id }}</nav>
+<div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Patient Information</h1>
+    <div class="d-flex flex-wrap gap-2">
+        {% if can_edit %}
+        <a class="btn btn-outline-primary" href="{{ url_for('edit_patient', patient_id=patient.patient_id) }}">Edit Patient</a>
+        {% endif %}
+        {% if can_add_clinical %}
+        <a class="btn btn-outline-primary" href="{{ url_for('add_history', patient_id=patient.patient_id) }}">Add Medical History</a>
+        <a class="btn btn-primary" href="{{ url_for('add_visit', patient_id=patient.patient_id) }}">Add Visit</a>
+        {% endif %}
+        {% if can_archive and patient.is_active %}
+        <form method="post" action="{{ url_for('archive_patient', patient_id=patient.patient_id) }}">
+            <button class="btn btn-outline-danger" type="submit">Archive Patient</button>
+        </form>
+        {% endif %}
+        {% if can_archive and not patient.is_active %}
+        <form method="post" action="{{ url_for('restore_patient', patient_id=patient.patient_id) }}">
+            <button class="btn btn-success" type="submit">Restore Patient</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4"><strong>Patient ID:</strong> {{ patient.patient_id }}</div>
+            <div class="col-md-4"><strong>Name:</strong> {{ patient.name }}</div>
+            <div class="col-md-4"><strong>Date of Birth:</strong> {{ patient.date_of_birth }}</div>
+            <div class="col-md-4"><strong>Age:</strong> {{ age if age is not none else '—' }}</div>
+            <div class="col-md-4"><strong>Gender:</strong> {{ patient.gender }}</div>
+            <div class="col-md-4"><strong>Phone:</strong> {{ patient.phone }}</div>
+            <div class="col-md-4"><strong>Blood Group:</strong> {{ patient.blood_group or '—' }}</div>
+            <div class="col-md-4"><strong>Emergency Contact:</strong> {{ patient.emergency_contact or '—' }}</div>
+            <div class="col-md-4"><strong>Account Status:</strong> {{ 'Active' if patient.is_active else 'Archived' }}</div>
+            <div class="col-12"><strong>Address:</strong> {{ patient.address or '—' }}</div>
+        </div>
+    </div>
+</div>
+
+<section class="card mb-4">
+    <div class="card-body">
+        <h2 class="h5">Medical History</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr><th>Condition</th><th>Diagnosis</th><th>Notes</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ item.condition }}</td>
+                        <td>{{ item.diagnosis or '—' }}</td>
+                        <td>{{ item.notes or '—' }}</td>
+                        <td>{{ item.created_at[:10] if item.created_at else '' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="text-muted">No medical history recorded.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card mb-4">
+    <div class="card-body">
+        <h2 class="h5">Visit History</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr><th>Visit Date</th><th>Doctor</th><th>Symptoms</th><th>Diagnosis</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for visit in visits %}
+                    <tr>
+                        <td>{{ visit.visit_date }}</td>
+                        <td>{{ visit.doctor }}</td>
+                        <td>{{ visit.symptoms or '—' }}</td>
+                        <td>{{ visit.diagnosis or '—' }}</td>
+                        <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('visit_details', visit_id=visit.id) }}">View Visit</a></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-muted">No visits recorded.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <div class="card-body">
+        <h2 class="h5">Prescriptions</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr><th>Medicine</th><th>Dosage</th><th>Frequency</th><th>Duration</th><th>Instructions</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in prescriptions %}
+                    <tr>
+                        <td>{{ item.medicine }}</td>
+                        <td>{{ item.dosage or '—' }}</td>
+                        <td>{{ item.frequency or '—' }}</td>
+                        <td>{{ item.duration or '—' }}</td>
+                        <td>{{ item.instructions or '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-muted">No prescriptions recorded.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

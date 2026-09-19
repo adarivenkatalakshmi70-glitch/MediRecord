@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Visit Details | MediRecord{% endblock %}
+{% block content %}
+<nav class="breadcrumb-nav mb-3">Dashboard → Patients → {{ visit.patient_code }} → Visit Details</nav>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Visit Details</h1>
+    {% if can_add_clinical %}
+    <a class="btn btn-primary" href="{{ url_for('add_prescription', visit_id=visit.id) }}">Add Prescription</a>
+    {% endif %}
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h6">Patient information</h2>
+        <p class="mb-1"><strong>{{ visit.patient_code }}</strong> — {{ visit.patient_name }}</p>
+        <p class="mb-1">Gender: {{ visit.gender }} | Phone: {{ visit.phone }} | Blood group: {{ visit.blood_group or '—' }}</p>
+        <a href="{{ url_for('patient_details', patient_id=visit.patient_code) }}">Back to patient profile</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>Visit date:</strong> {{ visit.visit_date }}</p>
+        <p><strong>Doctor:</strong> {{ visit.doctor }}</p>
+        <p><strong>Symptoms:</strong> {{ visit.symptoms or '—' }}</p>
+        <p><strong>Diagnosis:</strong> {{ visit.diagnosis or '—' }}</p>
+        <p class="mb-0"><strong>Notes:</strong> {{ visit.notes or '—' }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="h5">Prescriptions</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr><th>Medicine</th><th>Dosage</th><th>Frequency</th><th>Duration</th><th>Instructions</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in prescriptions %}
+                    <tr>
+                        <td>{{ item.medicine }}</td>
+                        <td>{{ item.dosage or '—' }}</td>
+                        <td>{{ item.frequency or '—' }}</td>
+                        <td>{{ item.duration or '—' }}</td>
+                        <td>{{ item.instructions or '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-muted">No prescriptions for this visit.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

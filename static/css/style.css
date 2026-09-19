@@ -1,0 +1,55 @@
+:root {
+    --accent: #2a7f7f;
+    --bg: #f5f7f8;
+    --text: #1f2933;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.navbar-brand {
+    color: var(--accent) !important;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.card {
+    border: 1px solid #e5e9eb;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(16, 24, 32, 0.04);
+}
+
+.stat-card .display-6 {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.breadcrumb-nav {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.login-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef4f4;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.form-label {
+    font-weight: 600;
+}

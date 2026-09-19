@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Add Patient | MediRecord{% endblock %}
+{% block content %}
+<nav class="breadcrumb-nav mb-3">Dashboard → Patients → Add Patient</nav>
+<div class="card">
+    <div class="card-body">
+        <h1 class="h4 mb-4">Register Patient</h1>
+        <form method="post" class="needs-validation" novalidate data-validate-patient="true">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="patient_id">Patient ID</label>
+                    <input class="form-control" id="patient_id" name="patient_id" required value="{{ form.patient_id or '' }}" placeholder="P1001">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label" for="name">Full Name</label>
+                    <input class="form-control" id="name" name="name" required minlength="2" value="{{ form.name or '' }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="date_of_birth">Date of Birth</label>
+                    <input class="form-control" id="date_of_birth" name="date_of_birth" type="date" required value="{{ form.date_of_birth or '' }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="gender">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="">Select</option>
+                        {% for option in ['Male', 'Female', 'Other', 'Prefer not to say'] %}
+                        <option value="{{ option }}" {% if form.gender == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="phone">Phone</label>
+                    <input class="form-control" id="phone" name="phone" required value="{{ form.phone or '' }}" placeholder="9876543210">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="blood_group">Blood Group</label>
+                    <select class="form-select" id="blood_group" name="blood_group">
+                        <option value="">Select</option>
+                        {% for option in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                        <option value="{{ option }}" {% if form.blood_group == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label" for="emergency_contact">Emergency Contact</label>
+                    <input class="form-control" id="emergency_contact" name="emergency_contact" value="{{ form.emergency_contact or '' }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="address">Address</label>
+                    <textarea class="form-control" id="address" name="address" rows="2">{{ form.address or '' }}</textarea>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-4" type="submit">REGISTER PATIENT</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
