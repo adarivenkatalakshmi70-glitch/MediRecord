@@ -24,6 +24,8 @@ import database as db
 
 app = Flask(__name__)
 app.secret_key = "medirecord-student-demo-secret"
+with app.app_context():
+    db.init_db(seed_demo=True)
 
 VALID_GENDERS = {"Male", "Female", "Other", "Prefer not to say"}
 VALID_BLOOD_GROUPS = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", ""}
